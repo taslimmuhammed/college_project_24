@@ -10,6 +10,7 @@ import Transfer from './Components/Transfer';
 import MyWorks from './Components/MyWorks';
 // import MarketPlace from './Pages/MarketPlace'
 import ProductDetails from './Pages/ProductDetails'
+import View from './Pages/View';
 
 function App() {
   const {Blocks, setBlocks}= useContext(EthersContext)
@@ -32,7 +33,9 @@ function App() {
           <Route path='/create'  element={<Create/>}></Route>
           <Route path='/view'  element={<ViewPage/>}></Route>
           <Route path='/transfer'  element={<Transfer/>}></Route>
-          <Route path='/myworks'  element={<MyWorks/>}></Route>
+          <Route path='/myips'  element={<MyWorks/>}></Route>
+          <Route path='/myips/:id' element={<MyWorks />}></Route>
+          <Route path="ips/:id" element={<View />} />
           {/* <Route path='/marketplace'  element={<MarketPlace/>}></Route> */}
           <Route path='/productdetails'  element={<ProductDetails/>}></Route>
 

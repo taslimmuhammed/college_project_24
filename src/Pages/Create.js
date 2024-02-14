@@ -52,8 +52,7 @@ function Create() {
                 <h2>Create</h2>
                 <div className="p-5  flex flex-col justify-start items-center text-left blue-glassmorphism  border-gray-400">
                     <div>
-                        <div className="text-white w-full text-sm ">Type of proof required </div><br />
-                        <div className="flex">
+                        <div className="">
                             <div className="text-white w-full text-sm mt-3">Name of your work  </div>
                             <input placeholder="Name of your work" className={inputStyle} type="text" onChange={(e) => { setName(e.target.value) }} />
                             <div className="text-white w-full text-sm mt-3">Upload files (* including large documents, designs, musics, photos etc ) </div>

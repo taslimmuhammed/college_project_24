@@ -53,6 +53,7 @@ export default function Ethers({ children }) {
       let res = await contract.createIP(uri,name);
       await res.wait();
       alert(`Succefully created IP`);
+      return 2;
     } catch (e) {
       console.log(e);
     }
