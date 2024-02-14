@@ -47,10 +47,10 @@ export default function Ethers({ children }) {
   };
 
 
-  const createIP = async (uri) => {
+  const createIP = async (uri,name) => {
     try {
       const contract = getContract();
-      let res = await contract.createIP(uri);
+      let res = await contract.createIP(uri,name);
       await res.wait();
       alert(`Succefully created IP`);
     } catch (e) {

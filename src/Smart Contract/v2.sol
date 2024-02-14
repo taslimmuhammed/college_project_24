@@ -5,6 +5,7 @@ contract IPFY{
     uint256 IPCounter;
     mapping(uint256 => IP)public IPDetails;
     mapping (uint256 => string) public URI;
+    mapping(uint256=>string) public Name;
     mapping (address => uint256[]) public userOwnedIPs;
     mapping (address => Lend[]) public userLends;
     uint256[] buyingMarket;
@@ -27,12 +28,14 @@ contract IPFY{
         address wallet;
     }
     struct Lend{
+        uint256 id;
         uint256 start;
         uint256 end;
         uint256 amount;
     }
     struct IPM{
         uint256 id;
+        string name;
         address currenOwner;
         uint256 price;
         string uri;
@@ -40,11 +43,12 @@ contract IPFY{
         bool buyable;
         uint256 time;
     }
-    function createIP(string memory _uri)public {
+    function createIP(string memory _uri,string memory _name)public {
         IPCounter++;
         IPDetails[IPCounter].creator = msg.sender;
         IPDetails[IPCounter].currenOwner = msg.sender;
         IPDetails[IPCounter].time = block.timestamp;
+        Name[IPCounter] = _name;
         URI[IPCounter] = _uri;
         userOwnedIPs[msg.sender].push(IPCounter);
     }
@@ -102,7 +106,7 @@ contract IPFY{
         IPDetails[_id].lendable = false;
         IPDetails[_id].lendingHistory.push(History(block.timestamp, block.timestamp+months*30 days*months,IPDetails[_id].lendingPrice,msg.sender));
         payable(IPDetails[_id].currenOwner).transfer(msg.value);
-        userLends[msg.sender].push(Lend(block.timestamp, block.timestamp+months*30 days*months,IPDetails[_id].lendingPrice));
+        userLends[msg.sender].push(Lend(_id,block.timestamp, block.timestamp+months*30 days*months,IPDetails[_id].lendingPrice));
 
     }
 
@@ -173,8 +177,9 @@ contract IPFY{
         uint256 len = end-start;
         IPM[] memory result = new IPM[](len);
         for(uint256 i=start;i<end;i++){
-            IP memory _ip = IPDetails[buyingMarket[i]];
-            result[i] = IPM(buyingMarket[i],_ip.currenOwner,_ip.buyingPrice,URI[buyingMarket[i]],_ip.buyable,_ip.buyable,_ip.time);
+            uint256 _id = buyingMarket[i];
+            IP memory _ip = IPDetails[_id];
+            result[i] = IPM(_id,Name[_id],_ip.currenOwner,_ip.buyingPrice,URI[_id],_ip.buyable,_ip.buyable,_ip.time);
         }
         return result;
     }
@@ -188,8 +193,9 @@ contract IPFY{
         uint256 len = end-start;
         IPM[] memory result = new IPM[](len);
         for(uint256 i=start;i<end;i++){
-            IP memory _ip = IPDetails[lendingMarket[i]];
-            result[i] = IPM(lendingMarket[i],_ip.currenOwner,_ip.lendingPrice,URI[lendingMarket[i]],_ip.lendable,_ip.buyable,_ip.time);
+            uint256 _id = lendingMarket[i];
+            IP memory _ip = IPDetails[_id];
+            result[i] = IPM(_id,Name[_id],_ip.currenOwner,_ip.lendingPrice,URI[_id],_ip.lendable,_ip.lendable,_ip.time);
         }
         return result;
     }
@@ -198,8 +204,9 @@ contract IPFY{
         uint256 len = userIps.length;
         IPM[] memory ips = new IPM[](userOwnedIPs[_user].length);
         for(uint256 i=0;i<len;i++){
-            IP memory _ip = IPDetails[userIps[i]];
-            ips[i] = IPM(userIps[i],_ip.currenOwner,_ip.buyingPrice,URI[userIps[i]],_ip.lendable,_ip.buyable,_ip.time);
+            uint256 _id = userIps[i];
+            IP memory _ip = IPDetails[_id];
+            ips[i] = IPM(_id,Name[_id],_ip.currenOwner,_ip.buyingPrice,URI[_id],_ip.lendable,_ip.buyable,_ip.time);
         }
         return ips;
     }
